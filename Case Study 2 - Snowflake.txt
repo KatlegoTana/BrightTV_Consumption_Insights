@@ -1,0 +1,77 @@
+---- Inner join Viwership and User Profile
+SELECT 
+A.userid,
+A.recorddate2,
+A.recordtime,
+A. channel2,
+B. Name,
+B. Surname,
+B. email,
+B. gender,
+B. race,
+B. age,
+B. province,
+B. social_media_handle
+FROM brighttv as A
+INNER join user_profile as B
+on A. USERID =  B. userid;
+
+---- Total number of viewrs 
+SELECT COUNT(*) AS total_users
+FROM client_base;
+
+---- Count distinct users
+SELECT
+count (distinct userid)
+FROM client_base;
+
+--- Distinct 
+SELECT 
+Distinct userid,
+recorddate2,
+recordtime,
+channel2,
+Name,
+Surname,
+email,
+gender,
+race,
+age,
+province,
+social_media_handle
+FROM client_base;
+
+---- Number of channels offered 
+SELECT 
+DISTINCT channel2
+FROM client_base;
+
+---- Number of views per channel
+SELECT
+DATE_TRUNC('HOUR', recordtime) AS hour_start,
+COUNT(*) AS count
+FROM client_data2
+GROUP BY hour_start
+ORDER BY hour_start;
+
+---- Time stamp
+UPDATE client_base2
+SET recordtime = TO_CHAR(TO_TIME(recordtime), 'HH24:MI:SS');
+SELECT *
+from client_base2
+
+---- case statement for time bucket
+SELECT 
+*, 
+CASE
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 0 AND 2 THEN '12AM - 3AM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 3 AND 5 THEN '3AM - 6AM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 6 AND 8 THEN '6AM - 9AM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 9 AND 11 THEN '9AM - 12PM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 12 AND 14 THEN '12PM - 3PM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 15 AND 17 THEN '3PM - 6PM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 18 AND 20 THEN '6PM - 9PM'
+WHEN EXTRACT(HOUR FROM RECORDTIME) BETWEEN 21 AND 23 THEN '9PM - 11:59PM'
+ELSE 'Unknown'
+END AS VIEWER_TIME
+FROM BRIGHTTV_SCRIPT;
